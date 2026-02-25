@@ -1,0 +1,110 @@
+{
+  "date": "2026-02-25",
+  "note": "Paris court-terme Day 2 — résolution 26-28 février",
+  "btc_price_at_entry": 65400,
+  "trades": [
+    {
+      "id": "ST2-1",
+      "market": "Gorton & Denton by-election - Reform UK wins",
+      "url": "https://polymarket.com/event/gorton-and-denton-by-election-winner",
+      "resolution": "2026-02-26 (résultats dans la nuit)",
+      "side": "YES",
+      "entry_price": 0.19,
+      "shares": 200,
+      "cost": 38.00,
+      "thesis": "Le marché donne 67% aux Greens et seulement 19% à Reform. MAIS les sondages montrent une course SERRÉE : Greens 22%, Reform 20%, Labour 18%, avec 31% d'indécis. Matt Goodwin (Reform) est un candidat médiatique controversé mais efficace. Si les indécis se répartissent vers Reform/Labour (vote anti-Green), Reform peut créer la surprise. Value bet à 5:1.",
+      "max_profit": 162.00,
+      "max_loss": -38.00,
+      "result": "PENDING",
+      "pnl": null
+    },
+    {
+      "id": "ST2-2",
+      "market": "Bitcoin above $60,000 on February 28",
+      "url": "https://polymarket.com/event/bitcoin-february-2026",
+      "resolution": "2026-02-28 17:00 ET",
+      "side": "YES",
+      "entry_price": 0.58,
+      "shares": 80,
+      "cost": 46.40,
+      "thesis": "Le marché dit 42% de chances que BTC passe sous $60K d'ici fin février. BTC est à $65.4K maintenant — il faudrait un crash de -8.3% en 3 jours. Le momentum post-SOTU est positif (tarifs pas aussi durs que prévu). Je parie YES au-dessus de $60K.",
+      "max_profit": 33.60,
+      "max_loss": -46.40,
+      "result": "PENDING",
+      "pnl": null
+    },
+    {
+      "id": "ST2-3",
+      "market": "Bitcoin hits $80K before $60K",
+      "url": "https://polymarket.com/event/will-bitcoin-hit-60k-or-80k-first",
+      "resolution": "Variable (quand l'un des deux est atteint)",
+      "side": "YES (80K first)",
+      "entry_price": 0.52,
+      "shares": 60,
+      "cost": 31.20,
+      "thesis": "BTC à $65.4K, équidistant des deux niveaux (~$5K dans chaque direction). Le marché est 50/50. Je penche légèrement bullish : le halving de 2024 continue de jouer, l'adoption institutionnelle progresse, et le SOTU n'a pas déclenché de panique. Position modérée.",
+      "max_profit": 28.80,
+      "max_loss": -31.20,
+      "result": "PENDING",
+      "pnl": null
+    },
+    {
+      "id": "ST2-4",
+      "market": "Real Madrid qualifié (vs Benfica) - UCL Round of 16",
+      "url": "https://polymarket.com/event/ucl-round-of-16",
+      "resolution": "2026-02-26 ~23:00 Paris",
+      "side": "YES",
+      "entry_price": 0.88,
+      "shares": 50,
+      "cost": 44.00,
+      "thesis": "Real Madrid a gagné 1-0 à l'aller au Portugal. Ce soir à Bernabéu, ils jouent à domicile. Même un 0-0 les qualifie. Benfica devrait marquer 2+ sans encaisser pour passer — très improbable contre cette défense. 88% me semble juste mais c'est quasi-gratuit.",
+      "max_profit": 6.00,
+      "max_loss": -44.00,
+      "result": "PENDING",
+      "pnl": null
+    },
+    {
+      "id": "ST2-5",
+      "market": "Paris Saint-Germain qualifié (vs Monaco) - UCL Round of 16",
+      "url": "https://polymarket.com/event/ucl-round-of-16",
+      "resolution": "2026-02-26 ~23:00 Paris",
+      "side": "YES",
+      "entry_price": 0.72,
+      "shares": 55,
+      "cost": 39.60,
+      "thesis": "PSG a gagné 3-2 à l'aller au Parc. Ce soir c'est le retour à Monaco. Monaco doit gagner 2-0 ou mieux pour passer. PSG a Mbappé... ah non il est au Real. Mais Dembélé, Kolo Muani sont en forme. Le PSG ne va pas s'effondrer. 72% me semble un peu bas — je prends.",
+      "max_profit": 15.40,
+      "max_loss": -39.60,
+      "result": "PENDING",
+      "pnl": null
+    },
+    {
+      "id": "ST2-6",
+      "market": "ZachXBT investigation released February 26",
+      "url": "https://polymarket.com/event/what-day-will-zachxbt-release-his-investigation",
+      "resolution": "2026-02-26 23:59 UTC",
+      "side": "YES",
+      "entry_price": 0.95,
+      "shares": 30,
+      "cost": 28.50,
+      "thesis": "95% de chances que ZachXBT sorte son investigation le 26 février. Il a teasé ça depuis des jours. C'est quasi-certain mais 5% de rendement gratuit si ça sort demain. Small bet, low risk.",
+      "max_profit": 1.50,
+      "max_loss": -28.50,
+      "result": "PENDING",
+      "pnl": null
+    }
+  ],
+  "summary": {
+    "total_short_term_bets": 6,
+    "total_cost": 227.70,
+    "total_max_profit": 247.30,
+    "categories": ["UK Politics (1)", "Crypto (3)", "Football/UCL (2)"],
+    "risk_profile": "Medium-High (Reform bet is high risk/high reward)",
+    "key_events": [
+      "26 fév: Gorton & Denton résultats (nuit)",
+      "26 fév: UCL Real/PSG matches (21h)",
+      "26 fév: ZachXBT investigation",
+      "28 fév: Bitcoin $60K threshold"
+    ]
+  }
+}
