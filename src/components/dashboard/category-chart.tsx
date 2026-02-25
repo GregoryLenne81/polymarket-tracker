@@ -1,8 +1,7 @@
 "use client";
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Position } from "@/lib/types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const COLORS = [
   "hsl(0, 72%, 55%)",     // Geopolitics - red
@@ -17,11 +16,14 @@ interface CategoryData {
   value: number;
   count: number;
   pnl: number;
+  percent: number;
 }
 
 function aggregateByCategory(positions: Position[]): CategoryData[] {
-  const map = new Map<string, CategoryData>();
+  const map = new Map<string, Omit<CategoryData, "percent">>();
+  let total = 0;
   for (const pos of positions) {
+    total += pos.cost;
     const existing = map.get(pos.category);
     if (existing) {
       existing.value += pos.cost;
@@ -36,70 +38,109 @@ function aggregateByCategory(positions: Position[]): CategoryData[] {
       });
     }
   }
-  return Array.from(map.values());
+  return Array.from(map.values()).map((d) => ({
+    ...d,
+    percent: total > 0 ? (d.value / total) * 100 : 0,
+  }));
 }
 
-function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: CategoryData }> }) {
-  if (!active || !payload?.length) return null;
-  const data = payload[0].payload;
-  return (
-    <div className="glass-strong rounded-lg p-3 text-sm">
-      <p className="font-semibold">{data.name}</p>
-      <p className="text-muted-foreground">
-        ${data.value.toFixed(2)} invested · {data.count} position{data.count > 1 ? "s" : ""}
-      </p>
-      <p
-        className={`font-mono font-semibold ${
-          data.pnl >= 0 ? "text-emerald-400" : "text-red-400"
-        }`}
-      >
-        {data.pnl >= 0 ? "+" : ""}${data.pnl.toFixed(2)} P&L
-      </p>
-    </div>
-  );
+function buildConicGradient(data: CategoryData[]): string {
+  const segments: string[] = [];
+  let cursor = 0;
+  for (let i = 0; i < data.length; i++) {
+    const start = cursor;
+    const end = cursor + data[i].percent * 3.6; // percent to degrees
+    segments.push(`${COLORS[i % COLORS.length]} ${start}deg ${end}deg`);
+    cursor = end;
+  }
+  return `conic-gradient(${segments.join(", ")})`;
 }
 
 export function CategoryChart({ positions }: { positions: Position[] }) {
   const data = aggregateByCategory(positions);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const totalInvested = data.reduce((s, d) => s + d.value, 0);
 
   return (
     <div className="glass-strong rounded-2xl p-5">
       <h2 className="text-lg font-semibold mb-1">Categories</h2>
       <p className="text-sm text-muted-foreground mb-4">Allocation by category</p>
-      <div className="h-[220px]">
-        {mounted && (
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius={55}
-                outerRadius={85}
-                paddingAngle={3}
-                dataKey="value"
-                stroke="none"
+
+      {/* Donut chart */}
+      <div className="relative mx-auto mb-4" style={{ width: 180, height: 180 }}>
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background: buildConicGradient(data),
+            mask: "radial-gradient(circle, transparent 54%, black 55%)",
+            WebkitMask: "radial-gradient(circle, transparent 54%, black 55%)",
+          }}
+        />
+
+        {/* Invisible hover segments */}
+        {data.map((cat, i) => {
+          const startPercent = data.slice(0, i).reduce((s, d) => s + d.percent, 0);
+          const midAngle = ((startPercent + cat.percent / 2) / 100) * 360 - 90;
+          const rad = (midAngle * Math.PI) / 180;
+          // Place an invisible hover target at the midpoint of each arc
+          const cx = 90 + Math.cos(rad) * 65;
+          const cy = 90 + Math.sin(rad) * 65;
+          return (
+            <div
+              key={cat.name}
+              className="absolute rounded-full"
+              style={{
+                width: 40,
+                height: 40,
+                left: cx - 20,
+                top: cy - 20,
+                cursor: "pointer",
+              }}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+            />
+          );
+        })}
+
+        {/* Center label */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          {hovered !== null ? (
+            <>
+              <span className="text-xs text-muted-foreground">{data[hovered].name}</span>
+              <span className="text-lg font-bold font-mono">${data[hovered].value.toFixed(0)}</span>
+              <span
+                className={`text-xs font-mono font-semibold ${
+                  data[hovered].pnl >= 0 ? "text-emerald-400" : "text-red-400"
+                }`}
               >
-                {data.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
-        )}
+                {data[hovered].pnl >= 0 ? "+" : ""}${data[hovered].pnl.toFixed(2)}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="text-xs text-muted-foreground">Total</span>
+              <span className="text-lg font-bold font-mono">${totalInvested.toFixed(0)}</span>
+            </>
+          )}
+        </div>
       </div>
+
+      {/* Legend */}
       <div className="space-y-2 mt-2">
         {data.map((cat, i) => (
-          <div key={cat.name} className="flex items-center justify-between text-sm">
+          <div
+            key={cat.name}
+            className="flex items-center justify-between text-sm"
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
+          >
             <div className="flex items-center gap-2">
               <div
                 className="h-3 w-3 rounded-full"
                 style={{ backgroundColor: COLORS[i % COLORS.length] }}
               />
               <span>{cat.name}</span>
+              <span className="text-muted-foreground text-xs">{cat.percent.toFixed(0)}%</span>
             </div>
             <span className="font-mono text-muted-foreground">
               ${cat.value.toFixed(0)}
